@@ -1,0 +1,7 @@
+2026-10-27T10:51:59.887Z INFO coordinator-b session state=CONNECTED
+2026-10-27T10:51:59.890Z INFO coordinator-b ready session_timeout=10.0s fencing=0 pairs=22286 digest=ed6333305917179aa98d99c3040edb3673b8c6f97cbc597fce4dc97e58862a99 source=/app/data/pairs.ndjson
+2026-10-27T10:51:59.890Z INFO coordinator-b waiting for leadership
+2026-10-27T10:52:14.624Z INFO coordinator-b became leader epoch=2 epoch_version=2
+2026-10-27T10:52:14.625Z INFO coordinator-b resumed from checkpoint next_unit=15/120
+2026-10-27T10:52:41.580Z INFO coordinator-b wrote result epoch=2 pointer_version=1 unique_pairs=22286 sha256=ed6333305917179aa98d99c3040edb3673b8c6f97cbc597fce4dc97e58862a99
+2026-10-27T10:52:41.583Z INFO coordinator-b session state=LOST

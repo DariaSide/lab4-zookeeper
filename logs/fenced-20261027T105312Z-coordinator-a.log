@@ -1,0 +1,11 @@
+2026-10-27T10:53:14.300Z INFO coordinator-a session state=CONNECTED
+2026-10-27T10:53:14.306Z INFO coordinator-a ready session_timeout=10.0s fencing=1 pairs=22286 digest=ed6333305917179aa98d99c3040edb3673b8c6f97cbc597fce4dc97e58862a99 source=/app/data/pairs.ndjson
+2026-10-27T10:53:14.306Z INFO coordinator-a waiting for leadership
+2026-10-27T10:53:14.308Z INFO coordinator-a became leader epoch=1 epoch_version=1
+2026-10-27T10:53:14.308Z INFO coordinator-a resumed from checkpoint next_unit=0/120
+2026-10-27T10:53:56.288Z INFO coordinator-a session state=SUSPENDED
+2026-10-27T10:53:56.288Z WARNING coordinator-a checkpoint unavailable unit=16 error=ConnectionLoss
+2026-10-27T10:53:56.291Z INFO coordinator-a session state=LOST
+2026-10-27T10:53:56.294Z INFO coordinator-a session state=CONNECTED
+2026-10-27T10:54:23.053Z ERROR coordinator-a BadVersionError stale result rejected result_epoch=1 current_epoch=2
+2026-10-27T10:54:23.056Z INFO coordinator-a session state=LOST

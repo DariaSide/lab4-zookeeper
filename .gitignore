@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+runtime/*
+!runtime/.gitkeep
+data/pairs.ndjson
+outputs/
+work/

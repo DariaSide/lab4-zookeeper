@@ -1,0 +1,109 @@
+name: zk-lab
+
+x-zookeeper-common: &zookeeper-common
+  image: zookeeper:3.9.6
+  restart: unless-stopped
+  environment: &zookeeper-environment
+    ZOO_TICK_TIME: 2000
+    ZOO_INIT_LIMIT: 5
+    ZOO_SYNC_LIMIT: 2
+    ZOO_4LW_COMMANDS_WHITELIST: ruok,srvr,mntr,stat
+    ZOO_SERVERS: >-
+      server.1=zk1:2888:3888;2181
+      server.2=zk2:2888:3888;2181
+      server.3=zk3:2888:3888;2181
+  networks: [zknet]
+  healthcheck:
+    test: ["CMD-SHELL", "echo ruok | nc -w 2 localhost 2181 | grep imok"]
+    interval: 3s
+    timeout: 3s
+    retries: 20
+
+services:
+  zk1:
+    <<: *zookeeper-common
+    hostname: zk1
+    environment:
+      <<: *zookeeper-environment
+      ZOO_MY_ID: 1
+    ports:
+      - "2181:2181"
+    volumes:
+      - zk1_data:/data
+      - zk1_log:/datalog
+
+  zk2:
+    <<: *zookeeper-common
+    hostname: zk2
+    environment:
+      <<: *zookeeper-environment
+      ZOO_MY_ID: 2
+    ports:
+      - "2182:2181"
+    volumes:
+      - zk2_data:/data
+      - zk2_log:/datalog
+
+  zk3:
+    <<: *zookeeper-common
+    hostname: zk3
+    environment:
+      <<: *zookeeper-environment
+      ZOO_MY_ID: 3
+    ports:
+      - "2183:2181"
+    volumes:
+      - zk3_data:/data
+      - zk3_log:/datalog
+
+  coordinator-a:
+    build: .
+    profiles: [coordinators]
+    hostname: coordinator-a
+    environment: &coordinator-environment
+      INSTANCE_ID: coordinator-a
+      ZK_HOSTS: zk1:2181,zk2:2181,zk3:2181
+      SESSION_TIMEOUT_MS: ${SESSION_TIMEOUT_MS:-10000}
+      WORK_UNITS: ${WORK_UNITS:-120}
+      UNIT_DELAY_SECONDS: ${UNIT_DELAY_SECONDS:-0.25}
+      EXPECTED_PAIRS: ${EXPECTED_PAIRS:-22286}
+      FENCING: ${FENCING:-0}
+      RUN_ID: ${RUN_ID:-manual}
+      DATA_FILE: /app/data/pairs.ndjson
+      LOG_DIR: /app/logs
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data:ro
+    networks: [zknet]
+    depends_on:
+      zk1: {condition: service_healthy}
+      zk2: {condition: service_healthy}
+      zk3: {condition: service_healthy}
+
+  coordinator-b:
+    build: .
+    profiles: [coordinators]
+    hostname: coordinator-b
+    environment:
+      <<: *coordinator-environment
+      INSTANCE_ID: coordinator-b
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data:ro
+    networks: [zknet]
+    depends_on:
+      zk1: {condition: service_healthy}
+      zk2: {condition: service_healthy}
+      zk3: {condition: service_healthy}
+
+networks:
+  zknet:
+
+volumes:
+  zk1_data:
+  zk1_log:
+  zk2_data:
+  zk2_log:
+  zk3_data:
+  zk3_log:
+

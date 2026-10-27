@@ -1,0 +1,20 @@
+Initial roles
+zk1: follower
+zk2: leader
+zk3: follower
+Stop one follower: zk1
+ Container zk-lab-zk1-1  Stopping
+ Container zk-lab-zk1-1  Stopped
+PASS: quorum still serves requests with two of three nodes
+Stop second node: zk3
+ Container zk-lab-zk3-1  Stopping
+ Container zk-lab-zk3-1  Stopped
+PASS: one remaining node cannot commit a write
+ Container zk-lab-zk3-1  Starting
+ Container zk-lab-zk1-1  Starting
+ Container zk-lab-zk1-1  Started
+ Container zk-lab-zk3-1  Started
+Restored roles
+zk1: follower
+zk2: follower
+zk3: leader
